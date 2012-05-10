@@ -513,8 +513,10 @@ public:
 				
 				group->verifyInvariants();
 				
-				// ...cleanup the spawner if it's been idle for more than preloaderIdleTime.
-				if (group->spawner->cleanable()) {
+				// ...cleanup the spawner if it's been idle for more than preloaderIdleTime
+				// and maxPreloaderIdleTime indicates it can be cleaned
+				if (group->spawner->cleanable()
+					&& group->options.getMaxPreloaderIdleTime() > 0) {
 					unsigned long long spawnerGcTime =
 						group->spawner->lastUsed() +
 						group->options.getMaxPreloaderIdleTime() * 1000000;
