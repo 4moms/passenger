@@ -152,6 +152,7 @@ namespace wtf {
 
 		cout << "User: " << info.username << endl;
 		cout << "Group: " << info.groupname << endl;
+		#ifdef HAVE_GETGROUPLIST
 		for (int i = 0; i < info.ngroups; i++) {
 			struct group *grp = getgrgid(info.gidset[i]);
 			cout << "Group[" << i << "]: ";
@@ -162,6 +163,9 @@ namespace wtf {
 			}
 			cout << endl;
 		}
+		#else
+		cout << "No (HAVE_GETGROUPLIST)" << endl;
+		#endif
 	}
 
 	void testSwitch(const StartupInfo &info) {
