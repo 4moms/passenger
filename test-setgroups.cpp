@@ -150,8 +150,18 @@ namespace wtf {
 			}
 		#endif
 
-		cout << "User: " << userInfo->pw_name << endl;
-		cout << "Group: " << defaultGroup << endl;
+		cout << "User: " << info.username << endl;
+		cout << "Group: " << info.groupname << endl;
+		for (int i = 0; i < info.ngroups; i++) {
+			struct group *grp = getgrgid(info.gidset[i]);
+			cout << "Group[" << i << "]: ";
+			if (grp == NULL) {
+				cout << "NULL?!";
+			} else {
+				cout << grp->gr_name;
+			}
+			cout << endl;
+		}
 	}
 
 	void testSwitch(const StartupInfo &info) {
