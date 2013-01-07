@@ -120,14 +120,10 @@ namespace wtf {
 		}
 
 		#if !defined(gid_t) && defined(__APPLE__)
-			int groups[1024];
+			int groups[NGROUPS_MAX];
 			info.ngroups = sizeof(groups) / sizeof(int);
 		#else
-		#ifdef NGROUPS_MAX
 			gid_t groups[NGROUPS_MAX];
-		#else
-			gid_t groups[1024];
-		#endif
 			info.ngroups = sizeof(groups) / sizeof(gid_t);
 		#endif
 		int ret;
@@ -144,7 +140,7 @@ namespace wtf {
 		#ifdef HAVE_GETGROUPLIST
 			ret = getgrouplist(userInfo->pw_name, groupInfo->gr_gid,
 				groups, &info.ngroups);
-			if (ret == -1) {
+			if (ret == -1 && errno != 0) {
 				int e = errno;
 				throw "getgrouplist() failed";
 			}
