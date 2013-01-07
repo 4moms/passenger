@@ -125,7 +125,7 @@ class Installer < PhusionPassenger::AbstractInstaller
 	
 	def after_install
 		super
-		FileUtils.rm_rf(@working_dir)
+		puts "<banner>Keeping Passenger compiled files...</banner> #{@working_dir}"
 	end
 
 private
