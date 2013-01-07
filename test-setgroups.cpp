@@ -119,11 +119,15 @@ namespace wtf {
 			throw "No group";
 		}
 
-		#ifdef __APPLE__
+		#if !defined(gid_t) && defined(__APPLE__)
 			int groups[1024];
 			info.ngroups = sizeof(groups) / sizeof(int);
 		#else
+		#ifdef NGROUPS_MAX
+			gid_t groups[NGROUPS_MAX];
+		#else
 			gid_t groups[1024];
+		#endif
 			info.ngroups = sizeof(groups) / sizeof(gid_t);
 		#endif
 		int ret;
