@@ -40,10 +40,6 @@ namespace wtf {
 	using namespace boost;
 	using namespace oxt;
 
-#ifdef __APPLE__
-	typedef gid_t int;
-#endif
-
 	struct StupidOptions {
 		string absolutePathToStartup;
 		string user;
@@ -123,9 +119,14 @@ namespace wtf {
 			throw "No group";
 		}
 
-		gid_t groups[1024];
-		info.ngroups = sizeof(groups) / sizeof(gid_t);
-
+		#ifdef __APPLE__
+			int groups[1024];
+			info.ngroups = sizeof(groups) / sizeof(int);
+		#else
+			gid_t groups[1024];
+			info.ngroups = sizeof(groups) / sizeof(gid_t);
+		#endif
+		int ret;
 		info.switchUser = true;
 		info.username = userInfo->pw_name;
 		info.groupname = groupInfo->gr_name;
@@ -133,8 +134,6 @@ namespace wtf {
 		info.shell = userInfo->pw_shell;
 		info.uid = userInfo->pw_uid;
 		info.gid = groupInfo->gr_gid;
-
-		int ret;
 		#if !defined(HAVE_GETGROUPLIST) && (defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__))
 			#define HAVE_GETGROUPLIST
 		#endif
