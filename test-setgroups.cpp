@@ -134,7 +134,7 @@ namespace wtf {
 		info.shell = userInfo->pw_shell;
 		info.uid = userInfo->pw_uid;
 		info.gid = groupInfo->gr_gid;
-		#if !defined(HAVE_GETGROUPLIST) && (defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__))
+		#if !defined(HAVE_GETGROUPLIST) && (defined(__linux__) || (defined(__APPLE__) && NGROUPS_MAX > 16) || defined(__FreeBSD__))
 			#define HAVE_GETGROUPLIST
 		#endif
 		#ifdef HAVE_GETGROUPLIST
